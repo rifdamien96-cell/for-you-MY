@@ -1,0 +1,761 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>for you ♡</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --kuromi-dark:#120712;
+      --kuromi-lilac:#b76cff;
+      --kuromi-soft:#d7a3ff;
+      --bijou-yellow:#fff0b8;
+      --pastel-bg: linear-gradient(180deg,#fff7fb 0%,#ffe6f4 100%);
+      --text:#3b2c45;
+      --remind-green:#eaf9ef;
+      --card-radius:14px;
+      --shadow: 0 10px 30px rgba(0,0,0,0.12);
+      --cute-padding:10px 18px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,"Caveat",sans-serif;background:var(--pastel-bg);color:var(--text);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+    a{color:inherit}
+    .app{min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:18px 12px;gap:12px;position:relative}
+
+    /* corner stickers removed */
+
+/* top nav */
+    .topnav{width:100%;max-width:1100px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;z-index:40}
+    .topnav button{background:transparent;border:2px solid rgba(107,89,122,0.12);padding:8px 12px;border-radius:999px;cursor:pointer;font-weight:700;color:#6b597a;transition:all .18s}
+    .topnav button.active{background:linear-gradient(90deg,var(--kuromi-lilac),var(--kuromi-soft));color:#fff;border:none;box-shadow:0 6px 18px rgba(183,108,255,0.18)}
+
+/* card base */
+    .card{width:100%;max-width:1000px;border-radius:var(--card-radius);overflow:hidden;box-shadow:var(--shadow);background:linear-gradient(180deg,#fff,#fff0fb);padding:24px;display:none}
+    .card.visible{display:block;animation:fadeIn .38s ease}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* buttons */
+    .btn{border-radius:999px;padding:var(--cute-padding);border:none;cursor:pointer;font-weight:800;font-size:0.98rem;display:inline-flex;align-items:center;gap:8px;box-shadow:0 8px 20px rgba(0,0,0,0.12);transition:transform .14s,box-shadow .14s}
+    .btn:active{transform:translateY(2px)}
+    .btn-yes{background:linear-gradient(180deg,var(--kuromi-lilac),var(--kuromi-soft));color:#fff;padding:12px 22px}
+    .btn-no{background:linear-gradient(180deg,var(--bijou-yellow),#fff7d0);color:#352b15;padding:10px 18px;border:2px solid #ffeeb0;position:absolute;left:50%;transform:translateX(-50%);box-shadow:0 10px 24px rgba(255,210,120,0.12)}
+
+/* greeting */
+    #greeting{background:linear-gradient(180deg,var(--kuromi-dark),#241021);color:#fff;text-align:center;padding:32px;position:relative;overflow:hidden}
+    .greet-top{display:flex;align-items:center;gap:18px;justify-content:center;flex-wrap:wrap}
+    .greet-text h1{font-family:"Caveat",cursive;font-size:2.6rem;margin:0;color:var(--kuromi-lilac)}
+    .greet-text p{margin:8px 0 0;color:#f3e9ff;font-size:1.02rem}
+    .greet-actions{margin-top:20px;display:flex;gap:18px;justify-content:center;align-items:center;position:relative;height:92px}
+    .greet-hint{font-size:.88rem;color:#f0e6ff;margin-top:10px;opacity:.98}
+
+/* For you */
+    .letter-block{margin:14px auto;background:linear-gradient(180deg,#fff7f8,#fff4fb);border-radius:12px;padding:20px;max-width:780px;border:1px dashed rgba(215,163,255,0.45);box-shadow:0 8px 20px rgba(168,85,247,0.04)}
+    .letter-block p{font-family:"Caveat",cursive;font-size:1.15rem;line-height:1.55;margin:0;color:#402a3d;text-align:left}
+
+/* full letter */
+    .full-letter{max-width:820px;margin:12px auto;background:#fff;padding:22px;border-radius:12px;border:1px solid #f3e6f8;box-shadow:0 8px 20px rgba(0,0,0,0.04)}
+    .full-letter p{font-family:"Caveat",cursive;font-size:1.12rem;line-height:1.7;margin:8px 0;color:#3e2a3a;text-align:left}
+
+/* Hehe GIFs */
+    .gifs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:12px}
+    .gif-card{background:#fff8fe;border-radius:10px;padding:10px;border:1px solid #f6ddf4;display:flex;flex-direction:column;align-items:center;justify-content:center;height:140px;cursor:pointer}
+    .gif-placeholder{font-size:3rem;opacity:.7}
+
+/* Reminders */
+    #reminders{background:var(--remind-green);color:#16422e;padding:28px}
+    .reminders-header{font-family:'Inter',sans-serif;font-size:2.2rem;font-weight:600;color:#16422e;text-align:center;margin-bottom:24px}
+    .mood-selection{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:32px}
+    .mood-toggle{background:#f0f9f4;border:1px solid #d1e7dd;padding:10px 20px;border-radius:50px;cursor:pointer;font-family:'Inter',sans-serif;font-weight:500;color:#16422e;transition:all .18s;font-size:0.95rem}
+    .mood-toggle.active{background:#4ade80;color:#fff;border:none;box-shadow:0 4px 12px rgba(74,222,128,0.3)}
+    .reminder-cards{display:flex;flex-direction:column;gap:16px;max-width:600px;margin:0 auto}
+    .reminder-card{background:#fff;border:1px solid #e5e7eb;border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.04);font-family:'Inter',sans-serif;font-weight:500;color:#374151;line-height:1.6;font-size:1.05rem}
+
+/* About (songs placeholders) */
+    #about{background:linear-gradient(180deg,#f3fff7,#eafbf0);padding:26px}
+    .about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+    .about-card{background:#fff;border-radius:12px;padding:12px;border:1px solid #def3e6;cursor:pointer;min-height:90px;display:flex;flex-direction:column;justify-content:center}
+    .about-expand{display:none;margin-top:8px;font-family:"Caveat",cursive;color:#264033}
+
+    /* Take care final */
+    #takecare{background:linear-gradient(180deg,#f5fff9,#ffffff);padding:24px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .take-text{font-family:"Caveat",cursive;font-size:1.15rem;color:#274d40;line-height:1.4;max-width:780px;text-align:left;margin:0 auto;padding:10px}
+  .take-title{font-family:"Caveat",cursive;font-size:2.6rem;color:var(--kuromi-lilac);margin:6px 0 4px}
+  .take-heart{width:120px;height:auto;margin:8px auto 4px;display:block;animation:floatY 4s ease-in-out infinite;}
+    .takecare-sticker{width:140px;height:140px;object-fit:contain;margin:8px auto;display:block;filter:drop-shadow(0 8px 18px rgba(0,0,0,0.12));animation:floatY 4s ease-in-out infinite}
+
+    /* Fade in up animation for notes */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+/* nav row */
+    .nav-row{display:flex;gap:10px;justify-content:center;margin-top:18px}
+    .btn-next{background:linear-gradient(90deg,#ffdce6,#ffc2e6);border:none;padding:10px 16px;border-radius:999px;font-weight:800;cursor:pointer}
+    .btn-back{background:transparent;border:2px solid rgba(179,133,201,0.3);padding:8px 14px;border-radius:999px;cursor:pointer}
+
+/* responsive */
+    @media (max-width:520px){
+      .corner-img{width:64px;height:64px}
+      .greet-actions{height:120px}
+      .full-letter p, .letter-block p{font-size:1.05rem}
+    }
+
+    /* Video cards */
+    .video-card {
+      background: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid #def3e6;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s ease;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.95rem;
+      color: #2a4d3e;
+    }
+    .video-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+      border-color: var(--kuromi-soft);
+    }
+
+    /* Daisy card (Hehe) - larger clickable icon */
+    .daisy-card{padding:18px 22px;min-height:0;display:inline-flex;flex-direction:column;align-items:center;justify-content:center;border-radius:12px}
+    .daisy-card:hover{transform:translateY(-4px) scale(1.02);box-shadow:0 10px 24px rgba(0,0,0,0.12)}
+
+    /* Make daisy flower clickable */
+    #daisy-button .petal-group, #daisy-button #daisy-center, #daisy-button #daisy-stem, #daisy-button #daisy-leaf {
+      pointer-events: none;
+    }
+
+    /* Daisy bloom animation */
+    .daisy-bloom .petal {
+      transform: rotate(var(--rotation, 0deg)) translateY(-50px) scale(1.6) !important;
+      transition: transform 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    .daisy-bloom .center {
+      width: 35px !important;
+      height: 35px !important;
+      background: #ffeb3b !important;
+      box-shadow: 0 0 15px rgba(255, 235, 59, 0.8) !important;
+    }
+    .daisy-bloom .leaf {
+      transform: rotate(-30deg) scale(1.3) !important;
+      transition: transform 0.8s ease-out;
+    }
+
+    /* Letter stickers */
+    .letter-sticker{position:absolute;width:92px;height:92px;object-fit:contain;z-index:60;pointer-events:none;filter:drop-shadow(0 8px 18px rgba(0,0,0,0.12));animation:floatY 4s ease-in-out infinite}
+    .letter-sticker.l1{left:6%;top:28%;transform:translate(-50%,-50%)}
+    .letter-sticker.l2{right:6%;top:28%;transform:translate(50%,-50%)}
+
+    /* Hehe stickers */
+    .hehe-sticker{position:absolute;width:92px;height:92px;object-fit:contain;z-index:60;pointer-events:none;filter:drop-shadow(0 8px 18px rgba(0,0,0,0.12));animation:floatY 4s ease-in-out infinite}
+    .hehe-sticker.h1{left:6%;top:28%;transform:translate(-50%,-50%)}
+    .hehe-sticker.h2{right:6%;top:28%;transform:translate(50%,-50%)}
+
+    /* Black box for greeting pict */
+    .black-box{background:#000;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center;min-width:72px;min-height:72px;box-shadow:0 8px 18px rgba(0,0,0,0.16), 0 0 20px rgba(183,108,255,0.8), 0 0 40px rgba(183,108,255,1), 0 0 60px rgba(183,108,255,0.9);animation:pulse-glow 2s ease-in-out infinite;}
+    .black-box img{max-width:72px;max-height:72px;object-fit:contain;border-radius:8px;display:block}
+    @keyframes pulse-glow{0%,100%{box-shadow:0 8px 18px rgba(0,0,0,0.16), 0 0 20px rgba(183,108,255,0.8), 0 0 40px rgba(183,108,255,1), 0 0 60px rgba(183,108,255,0.9);}50%{box-shadow:0 8px 18px rgba(0,0,0,0.16), 0 0 30px rgba(183,108,255,1), 0 0 50px rgba(183,108,255,1.2), 0 0 70px rgba(183,108,255,1);}}
+    @media (max-width:520px){ .black-box{min-width:56px;min-height:56px} .black-box img{max-width:48px;max-height:48px} }
+
+    /* About page stickers */
+    .about-sticker{position:absolute;width:96px;height:96px;object-fit:contain;z-index:60;pointer-events:none;filter:drop-shadow(0 10px 18px rgba(0,0,0,0.12));animation:floatY 4s ease-in-out infinite}
+    .about-sticker.a1{left:6%;top:28%;transform:translate(-50%,-50%)}
+    .about-sticker.a2{right:6%;top:28%;transform:translate(50%,-50%)}
+    /* Reminders stickers */
+    .reminder-sticker{position:absolute;width:88px;height:88px;object-fit:contain;z-index:60;pointer-events:none;filter:drop-shadow(0 10px 18px rgba(0,0,0,0.12));animation:floatY 4.2s ease-in-out infinite}
+    .reminder-sticker.l1{left:6%;top:18%;transform:translate(-50%,-50%)}
+    .reminder-sticker.l2{right:6%;top:18%;transform:translate(50%,-50%)}
+    /* Hehe floating stickers */
+    .has-stickers { position: relative; }
+    .hehe-sticker{position:absolute;width:92px;height:92px;object-fit:contain;z-index:60;pointer-events:none;filter:drop-shadow(0 10px 18px rgba(0,0,0,0.12));animation:floatY 4s ease-in-out infinite}
+    .hehe-sticker.left{left:8%;top:30%;transform:translate(-50%,-50%)}
+    .hehe-sticker.right{right:8%;top:44%;transform:translate(50%,-50%)}
+    @keyframes floatY{0%{transform:translateY(-4px)}50%{transform:translateY(6px)}100%{transform:translateY(-4px)}}
+  </style>
+</head>
+<body>
+  <main class="app">
+
+  <!-- corner stickers removed -->
+
+    <!-- top nav -->
+    <div class="topnav" id="topnav">
+      <button data-target="for-you" class="active">For you</button>
+      <button data-target="letter">Letter</button>
+      <button data-target="hehe">Hehe</button>
+      <button data-target="reminders">Reminder</button>
+      <button data-target="about">About you</button>
+      <button data-target="takecare">Take care</button>
+    </div>
+
+    <!-- GREETING (only Yes / Nooo buttons; no extra button under it) -->
+    <section id="greeting" class="card visible" aria-label="Greeting">
+      <div class="greet-top" style="display:flex;align-items:center;gap:18px;justify-content:center;flex-wrap:wrap">
+        <!-- heart + picture row -->
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div style="display:flex;flex-direction:column;align-items:center;">
+            <h1 style="margin:0">♡</h1>
+            <p style="margin:6px 0 0;font-size:0.9rem;color:#f3e9ff;">&nbsp;</p>
+          </div>
+
+          <!-- black box containing the attached pict (save the attachment as 'kuromi.png' in the same folder) -->
+          <div class="black-box" aria-hidden="false" style="background:#000;border-radius:12px;padding:6px;display:flex;align-items:center;justify-content:center;min-width:80px;min-height:80px;box-shadow:0 8px 18px rgba(0,0,0,0.16);">
+            <img id="greetPict" src="for you 1.png" alt="For you sticker" onerror="this.style.display='none'; this.parentElement.textContent='😊';" />
+          </div>
+        </div>
+
+        <div class="greet-text">
+          <h1 style="font-family: 'Caveat', cursive; font-size:2.6rem; margin:0; color:var(--kuromi-lilac)">♡</h1>
+          <p style="margin:8px 0 0;color:#f3e9ff;font-size:1.02rem">Hi love, it's been a while. Are you ready?</p>
+        </div>
+      </div>
+
+      <div class="greet-actions" id="greetActions" aria-hidden="false">
+        <button class="btn btn-yes" id="yesBtn" title="Yes — open">💜 Yes</button>
+        <button class="btn btn-no" id="noBtn" title="No — try to click me">💔 Nooo</button>
+      </div>
+
+      <div class="greet-hint">try tapping "Nooo" if you dare</div>
+    </section>
+
+    <!-- FOR YOU -->
+    <section id="for-you" class="card" data-section="for-you" aria-label="For you">
+      <header style="text-align:center">
+        <h2 class="title">For you</h2>
+      </header>
+
+      <div class="letter-block" style="background: linear-gradient(135deg, rgba(183,108,255,0.1), rgba(215,163,255,0.15)); border: 2px solid rgba(183,108,255,0.3); border-radius: 20px; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 20% 80%, rgba(183,108,255,0.1) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(215,163,255,0.1) 0%, transparent 50%), radial-gradient(circle at 40% 40%, rgba(255,235,59,0.05) 0%, transparent 50%); pointer-events: none;"></div>
+        <p style="position: relative; z-index: 1; font-family: 'Caveat', cursive; font-size: 1.3rem; color: #3b2c45; line-height: 1.6; margin: 0; text-align: center;">You've always meant more to me than words could hold. I wanted to gather the little moments, the soft ones, the in-between ones and keep them safe here, with you in mind.</p>
+      </div>
+
+      <div class="nav-row">
+        <button class="btn-back" data-prev="greeting">Back</button>
+        <button class="btn-next" data-next="letter">Letter</button>
+      </div>
+    </section>
+
+    <!-- LETTER -->
+    <section id="letter" class="card" aria-label="Letter">
+      <header style="text-align:center">
+        <h2 class="title">Letter</h2>
+
+      </header>
+
+      <button id="letterBtn" style="font-size:4rem; background:none; border:none; cursor:pointer; transition:transform 0.3s ease; padding:20px; display:block; margin:20px auto;" aria-label="Click to open letter">✉️</button>
+
+      <div id="letterContent" class="full-letter" style="display:none; opacity:0; transition:opacity 0.5s ease;">
+        <p>Hi love,</p>
+<p>I think I finally understand. You had to leave because that's who you are. And maybe that's exactly why I loved you.</p>
+<p>You've always followed your heart, even when it meant breaking mine. And I respect that especially you choosing your family over me.</p>
+<p>If you think I hate you, I don't. Every version of me still loves you — the lost one, the hopeful one, even the one trying to let go.</p>
+<p>I still love everything about you maybe too much sometimes. How could I not? That sweet smile, your laughter, those big pretty eyes, that soft voice… even your bunny teeth. You're everything I ever wanted.</p>
+<p>I'm so grateful I met you. It still feels like we've known each other longer than time allowed. You have this gentle soul that leaves a mark, and even from afar, I still feel the softness you left behind.</p>
+<p>Lately, I've been thinking a lot. Wondering if I treated you right, if I ever made you feel unseen or unloved. I just want to say I'm sorry. I never meant to hurt you, even when I didn't fully understand you.</p>
+<p>You've always been strong, stronger than I realized. I admire that about you. And I respect the way you chose what you had to.</p>
+<p>If life ever lets us cross paths again, I just hope it's peaceful — whether as friends or something more. No pressure, no expectations. Just understanding.</p>
+<p>My door's still open if you ever need me. And I hope you like the little gift I made just for you</p>
+        <button id="closeLetterBtn" class="btn-back" style="margin: 20px auto 0; display: block;">Close</button>
+      </div>
+
+      <img src="letter 1.png" class="letter-sticker l1" alt="Letter Sticker 1">
+      <img src="letter 2.png" class="letter-sticker l2" alt="Letter Sticker 2">
+
+      <div class="nav-row">
+        <button class="btn-back" data-prev="for-you">Back</button>
+        <button class="btn-next" data-next="hehe">Hehe</button>
+      </div>
+    </section>
+
+    <!-- HEHE -->
+    <section id="hehe" class="card has-stickers" aria-label="Hehe">
+      <header style="text-align:center">
+        <h2 class="title">Hehe</h2>
+        <p class="subtitle"></p>
+      </header>
+        <div id="daisy-container" class="flex flex-col items-center justify-center py-12">
+          <div id="daisy-button" class="daisy-flower" style="cursor:pointer; position:relative; width:120px; height:180px; margin:0 auto;">
+            <!-- Stem -->
+            <div class="stem" style="position:absolute; width:6px; height:100px; background:#4caf50; bottom:0; left:50%; transform:translateX(-50%); border-radius:3px; box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+            <!-- Leaf -->
+            <div class="leaf" style="position:absolute; width:25px; height:40px; background:#66bb6a; border-radius:50% 0 50% 50%; bottom:20px; left:30%; transform:rotate(-20deg); box-shadow:0 1px 3px rgba(0,0,0,0.2);"></div>
+            <!-- Center -->
+            <div class="center" style="position:absolute; width:25px; height:25px; background:#ffeb3b; border-radius:50%; bottom:100px; left:50%; transform:translateX(-50%); box-shadow:0 2px 6px rgba(0,0,0,0.2);"></div>
+            <!-- Petals -->
+            <div class="petals" style="position:absolute; bottom:100px; left:50%; transform:translateX(-50%);">
+              <div class="petal petal1" style="position:absolute; width:20px; height:35px; background:#ffffff; border-radius:50% 0 50% 0; transform:rotate(0deg) translateY(-17px); box-shadow:0 2px 4px rgba(0,0,0,0.1);"></div>
+              <div class="petal petal2" style="position:absolute; width:20px; height:35px; background:#ffffff; border-radius:50% 0 50% 0; transform:rotate(45deg) translateY(-17px); box-shadow:0 2px 4px rgba(0,0,0,0.1);"></div>
+              <div class="petal petal3" style="position:absolute; width:20px; height:35px; background:#ffffff; border-radius:50% 0 50% 0; transform:rotate(90deg) translateY(-17px); box-shadow:0 2px 4px rgba(0,0,0,0.1);"></div>
+              <div class="petal petal4" style="position:absolute; width:20px; height:35px; background:#ffffff; border-radius:50% 0 50% 0; transform:rotate(135deg) translateY(-17px); box-shadow:0 2px 4px rgba(0,0,0,0.1);"></div>
+              <div class="petal petal5" style="position:absolute; width:20px; height:35px; background:#ffffff; border-radius:50% 0 50% 0; transform:rotate(180deg) translateY(-17px); box-shadow:0 2px 4px rgba(0,0,0,0.1);"></div>
+              <div class="petal petal6" style="position:absolute; width:20px; height:35px; background:#ffffff; border-radius:50% 0 50% 0; transform:rotate(225deg) translateY(-17px); box-shadow:0 2px 4px rgba(0,0,0,0.1);"></div>
+              <div class="petal petal7" style="position:absolute; width:20px; height:35px; background:#ffffff; border-radius:50% 0 50% 0; transform:rotate(270deg) translateY(-17px); box-shadow:0 2px 4px rgba(0,0,0,0.1);"></div>
+              <div class="petal petal8" style="position:absolute; width:20px; height:35px; background:#ffffff; border-radius:50% 0 50% 0; transform:rotate(315deg) translateY(-17px); box-shadow:0 2px 4px rgba(0,0,0,0.1);"></div>
+            </div>
+          </div>
+
+          <p id="daisy-text" style="margin-top:40px; font-family:'Poppins',sans-serif; font-size:1.1rem; color:#666; text-align:center;">
+            Click me to bloom!
+          </p>
+
+          <img src="hehe 1.png" class="hehe-sticker h1" alt="Hehe Sticker 1">
+          <img src="hehe 2.png" class="hehe-sticker h2" alt="Hehe Sticker 2">
+      </div>
+    </section>
+
+    <!-- REMINDERS -->
+    <section id="reminders" class="card" aria-label="Reminders">
+      <header style="text-align:center">
+        <h2 class="reminders-header">Reminders</h2>
+      </header>
+
+      <div class="mood-selection">
+        <button class="mood-toggle active" data-mood="sad">Sad</button>
+        <button class="mood-toggle" data-mood="angry">Angry</button>
+        <button class="mood-toggle" data-mood="tired">Tired</button>
+        <button class="mood-toggle" data-mood="happy">Happy</button>
+      </div>
+
+      <div class="reminder-cards">
+        <div class="reminder-set" data-mood="sad" style="display:block;">
+          <div class="reminder-card">You don't have to smile all the time. I hope you know that even in silence, you're still deeply loved.</div>
+          <div class="reminder-card">Even when your eyes look heavy, I still see that sparkle. The one that made me stay a little longer.</div>
+          <div class="reminder-card">You don't need to fix everything right now. Just let yourself be, and that's enough.</div>
+        </div>
+        <div class="reminder-set" data-mood="angry" style="display:none;">
+          <div class="reminder-card">Breathe, love. You don't owe anyone your peace. Protect it gently, the way you guard your heart.</div>
+          <div class="reminder-card">Don't let the world steal your calm. You've always been stronger when you stay soft.</div>
+          <div class="reminder-card">Let go gently. The world always feels kinder when you do.</div>
+        </div>
+        <div class="reminder-set" data-mood="tired" style="display:none;">
+          <div class="reminder-card">I still remember how you'd say, "I'm fine," while your eyes begged for rest. Please, rest now.</div>
+          <div class="reminder-card">You've done enough for today, and that's already more than most. I'm proud of you, baby.</div>
+          <div class="reminder-card">I'd hold you quiet and let you drift. Just to see that soft calm on your face again.</div>
+        </div>
+        <div class="reminder-set" data-mood="happy" style="display:none;">
+          <div class="reminder-card">I hope you keep that smile. It's the same one that made me believe love could be gentle.</div>
+          <div class="reminder-card">When you laugh, it feels like the world finally makes sense again.</div>
+          <div class="reminder-card">Happiness suits you. The way you smile, with those bunny teeth. That's my favorite sight in the world.</div>
+        </div>
+      </div>
+
+      <img src="reminder 1.png" class="reminder-sticker l1" alt="Reminder Sticker 1">
+      <img src="reminder 2.png" class="reminder-sticker l2" alt="Reminder Sticker 2">
+
+      <div class="nav-row">
+        <button class="btn-back" data-prev="hehe">Back</button>
+        <button class="btn-next" data-next="about">About you</button>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="card" aria-label="About you">
+      <header style="text-align:center">
+        <h2 class="title">About you</h2>
+      </header>
+
+      <div class="about-grid">
+        <div class="video-card" data-src="LYRICS/wait.mp4">
+          <video src="LYRICS/wait.mp4" muted preload="metadata" style="width:100%; height:auto; border-radius:8px;"></video>
+        </div>
+        <div class="video-card" data-src="LYRICS/stuck.mp4">
+          <video src="LYRICS/stuck.mp4" muted preload="metadata" style="width:100%; height:auto; border-radius:8px;"></video>
+        </div>
+        <div class="video-card" data-src="LYRICS/closing night.mp4">
+          <video src="LYRICS/closing night.mp4" muted preload="metadata" style="width:100%; height:auto; border-radius:8px;"></video>
+        </div>
+        <div class="video-card" data-src="LYRICS/stuck w you.mp4">
+          <video src="LYRICS/stuck w you.mp4" muted preload="metadata" style="width:100%; height:auto; border-radius:8px;"></video>
+        </div>
+        <div class="video-card" data-src="LYRICS/Good parts.mp4">
+          <video src="LYRICS/Good parts.mp4" muted preload="metadata" style="width:100%; height:auto; border-radius:8px;"></video>
+        </div>
+        <div class="video-card" data-src="LYRICS/the abbys.mp4">
+          <video src="LYRICS/the abbys.mp4" muted preload="metadata" style="width:100%; height:auto; border-radius:8px;"></video>
+        </div>
+        <div class="video-card" data-src="LYRICS/yes to heaven.mp4">
+          <video src="LYRICS/yes to heaven.mp4" muted preload="metadata" style="width:100%; height:auto; border-radius:8px;"></video>
+        </div>
+      </div>
+
+      <img src="about you 1.png" class="about-sticker a1" alt="About Sticker 1">
+      <img src="about you 2.png" class="about-sticker a2" alt="About Sticker 2">
+
+      <div class="nav-row">
+        <button class="btn-back" data-prev="reminders">Back</button>
+        <button class="btn-next" data-next="takecare">Take care</button>
+      </div>
+    </section>
+
+    <!-- TAKE CARE final (word-by-word typewriter) -->
+    <section id="takecare" class="card" aria-label="Take care">
+      <div style="display:flex; flex-direction:column; align-items:center;">
+        <h2 class="take-title">Take care</h2>
+        <img id="takecare-image" src="take care mid.png" alt="Take care" class="take-heart"/>
+      </div>
+      <div id="typewriter-text" class="take-text"></div>
+    </section>
+
+  </div>
+
+  <script>
+    (function(){
+
+      /* corner stickers removed */
+
+      // Sections & nav
+      const sections = Array.from(document.querySelectorAll('.card'));
+      const topnavBtns = Array.from(document.querySelectorAll('.topnav button'));
+
+      const fullText = `<div style="text-align: left; max-width: 600px; margin: 0 auto; line-height: 1.8; font-style: italic;"><p style="margin-bottom: 1.5em; font-weight: bold; font-size: 1.4em;">MY,</p><p style="margin-bottom: 1.5em;">I always remember you even from a distance. And distance doesn't kill care, it just changes its shape. I want to fight for you so badly, but I'm scared it'll only push you further away. You know I would do anything for you. And now, we don't speak. We don't reach. We've drifted into separate constellations but somewhere in me still lives the quiet wish that you're okay. I hope your days don't stretch too long, and your nights don't sit too heavy on your chest. I hope your silence is healing, not hollow.</p><p style="margin-bottom: 1.5em;">So from here, all I want is for life to treat you gentler than it treated us. I hope laughter finds its way back to you when you least expect it. I hope you feel held maybe not by me, but by the world, by your loved ones, by the smallest moments of grace.</p><p style="margin-bottom: 1.5em;">I don't ask for your return, I don't reach into the past. But from far away, I still send you this with the hope that every hard place softens, that every wound finds its closing, and that you are remembered, always, with tenderness.</p><p style="margin-bottom: 1.5em;">But if coming back ever crosses your mind. I hope you know I'd still choose you, every single time. My heart never learned how to stop waiting for you. It's sad, I know, but I never loved anyone like I love you. And even if you never return, there'll always be a part of me that remembers you like home. You're my home, you're the familiarity and peace I craved for.</p><p style="margin-bottom: 1.5em;">Until then, I hope my prayers find you when I no longer can. This isn't goodbye, it's just love finding a quieter place to live. Take care always, my love.</p><p style="margin-bottom: 1em; font-weight: bold;">Yours truly,<br>R</p></div>`;
+
+      let typeWriterTimeout;
+
+      function typeWriter(element, text, i = 0) {
+        if (typeWriterTimeout) clearTimeout(typeWriterTimeout); // Clear any existing timeout
+        if (i < text.length) {
+          const nextChar = text.charAt(i);
+          if (nextChar === '<') {
+            // Find the end of the HTML tag
+            const closingBracketIndex = text.indexOf('>', i);
+            if (closingBracketIndex !== -1) {
+              const tag = text.substring(i, closingBracketIndex + 1);
+              element.innerHTML += tag;
+              i = closingBracketIndex + 1;
+            } else {
+              // Malformed tag, just append char
+              element.innerHTML += nextChar;
+              i++;
+            }
+          } else {
+            element.innerHTML += nextChar;
+            i++;
+          }
+          typeWriterTimeout = setTimeout(() => typeWriter(element, text, i), 50); // Typing speed (slowed down from 20 to 50)
+        }
+      }
+
+      function showSection(id){
+        sections.forEach(s=>{
+          if(s.id === id){
+            s.classList.add('visible');
+            s.style.display='block';
+            if (id === 'takecare') {
+              const typewriterTextElement = document.getElementById('typewriter-text');
+              if (typewriterTextElement) {
+                typewriterTextElement.innerHTML = ''; // Clear previous text
+                typeWriter(typewriterTextElement, fullText);
+              }
+            }
+          }
+          else { s.classList.remove('visible'); s.style.display='none'; }
+        });
+        topnavBtns.forEach(b=> b.classList.toggle('active', b.dataset.target === id));
+
+  // corner stickers removed; no-op
+
+        window.scrollTo({top:0,behavior:'smooth'});
+      }
+
+      topnavBtns.forEach(btn=> btn.addEventListener('click', ()=> showSection(btn.dataset.target)));
+
+      // next/back handlers
+      document.body.addEventListener('click', function(e){
+        const next = e.target.closest('[data-next]');
+        if(next){ showSection(next.dataset.next); return; }
+        const prev = e.target.closest('[data-prev]');
+        if(prev){ showSection(prev.dataset.prev); return; }
+      });
+
+      // Greeting: No button dodge logic (3 tries then clickable)
+      const greetArea = document.getElementById('greetActions');
+      const btnNo = document.getElementById('noBtn');
+      const btnYes = document.getElementById('yesBtn');
+
+      function centerNo(){ btnNo.style.left='50%'; btnNo.style.top='0'; btnNo.style.transform='translateX(-50%)'; }
+      function placeRandom(){
+        const p = greetArea.getBoundingClientRect();
+        const b = btnNo.getBoundingClientRect();
+        const padding = 8;
+        const maxX = Math.max(p.width - b.width - padding, padding);
+        const maxY = Math.max(p.height - b.height - padding, padding);
+        const x = Math.floor(Math.random() * (maxX - padding + 1)) + padding;
+        const y = Math.floor(Math.random() * (maxY - padding + 1)) + padding;
+        btnNo.style.transform = '';
+        btnNo.style.left = x + 'px';
+        btnNo.style.top = y + 'px';
+      }
+
+      let tries = 0;
+      function dodge(){
+        if(btnNo._moving) return;
+        btnNo._moving = true;
+        tries++;
+        placeRandom();
+        setTimeout(()=> btnNo._moving = false, 220);
+        if(tries >= 3){
+          btnNo.removeEventListener('mouseenter', onDodge);
+          btnNo.removeEventListener('focus', onDodge);
+          btnNo.removeEventListener('touchstart', onTouchDodge);
+          btnNo.style.left='60%'; btnNo.style.top='0'; btnNo.style.transform='';
+        }
+      }
+      function onDodge(e){ e.preventDefault(); dodge(); }
+      function onTouchDodge(e){ e.preventDefault(); dodge(); }
+
+      btnNo.addEventListener('mouseenter', onDodge);
+      btnNo.addEventListener('focus', onDodge);
+      btnNo.addEventListener('touchstart', onTouchDodge, {passive:false});
+      btnNo.addEventListener('click', function(e){
+        e.preventDefault();
+        if(tries >= 3){ showSection('for-you'); centerNo(); tries = 0; } else dodge();
+      });
+
+      btnYes.addEventListener('click', function(){ showSection('for-you'); centerNo(); tries = 0; });
+
+      window.addEventListener('resize', centerNo);
+      centerNo();
+
+      // GIF placeholders behavior
+      document.querySelectorAll('.gif-card').forEach(card=>{
+        card.addEventListener('click', ()=>{
+          const src = card.dataset.src;
+          if(src){ window.open(src,'_blank'); }
+          else {
+            card.animate([{transform:'scale(.98)'},{transform:'scale(1)'}],{duration:180});
+            card.style.border = '2px dashed #ffd6ea';
+            setTimeout(()=> card.style.border='1px solid #f6ddf4',350);
+          }
+        });
+        card.addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' ') card.click(); });
+      });
+
+      // Reminders mood selection
+      const moodToggles = document.querySelectorAll('.mood-toggle');
+      moodToggles.forEach(t=>{
+        t.addEventListener('click', function(){
+          moodToggles.forEach(x=> x.classList.remove('active'));
+          t.classList.add('active');
+          const moodName = t.dataset.mood;
+          document.querySelectorAll('.reminder-set').forEach(set=>{
+            set.style.display = set.dataset.mood === moodName ? 'block' : 'none';
+          });
+        });
+      });
+
+      // About cards expand
+      document.querySelectorAll('.about-card').forEach(card=>{
+        card.addEventListener('click', function(){
+          const expand = card.querySelector('.about-expand');
+          if(!expand) return;
+          if(expand.style.display === 'block'){ expand.style.display='none'; }
+          else{ expand.style.display='block'; expand.animate([{opacity:0, transform:'translateY(6px)'},{opacity:1, transform:'translateY(0)'}],{duration:260}); }
+        });
+        card.addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' ') card.click(); });
+      });
+
+        // --- Video modal for About section ---
+        (function(){
+          // create modal elements
+          const videoModal = document.createElement('div');
+          videoModal.id = 'videoModal';
+          videoModal.style.position = 'fixed';
+          videoModal.style.inset = '0';
+          videoModal.style.background = 'rgba(10,10,14,0.6)';
+          videoModal.style.display = 'flex';
+          videoModal.style.alignItems = 'center';
+          videoModal.style.justifyContent = 'center';
+          videoModal.style.zIndex = '120';
+          videoModal.style.opacity = '0';
+          videoModal.style.pointerEvents = 'none';
+          videoModal.setAttribute('aria-hidden','true');
+
+          const player = document.createElement('div');
+          player.className = 'player';
+          player.style.width = 'min(300px,94%)';
+          player.style.background = '#000';
+          player.style.borderRadius = '12px';
+          player.style.overflow = 'hidden';
+
+          const vid = document.createElement('video');
+          vid.id = 'modalVideo';
+          vid.controls = true;
+          vid.style.width = '100%';
+          vid.style.maxHeight = '200px';
+
+          const controls = document.createElement('div');
+          controls.className = 'controls';
+          controls.style.padding = '8px';
+          controls.style.background = '#fff';
+          controls.style.display = 'flex';
+          controls.style.justifyContent = 'center';
+
+          const closeBtn = document.createElement('button');
+          closeBtn.id = 'closeVideo';
+          closeBtn.className = 'close';
+          closeBtn.textContent = 'Close';
+          closeBtn.style.background = 'transparent';
+          closeBtn.style.border = 'none';
+          closeBtn.style.fontSize = '1.1rem';
+          closeBtn.style.padding = '8px';
+          closeBtn.style.cursor = 'pointer';
+
+          controls.appendChild(closeBtn);
+          player.appendChild(vid);
+          player.appendChild(controls);
+          videoModal.appendChild(player);
+          document.body.appendChild(videoModal);
+
+          function openVideo(src){
+            if(!src) return;
+            vid.src = src;
+            videoModal.style.opacity = '1'; videoModal.style.pointerEvents = 'auto'; videoModal.setAttribute('aria-hidden','false');
+            vid.play().catch(()=>{});
+          }
+          function closeVideo(){
+            videoModal.style.opacity = '0'; videoModal.style.pointerEvents = 'none'; videoModal.setAttribute('aria-hidden','true');
+            try{ vid.pause(); vid.currentTime = 0; vid.removeAttribute('src'); }catch(e){}
+          }
+
+          document.querySelectorAll('.video-card').forEach(card=>{
+            card.addEventListener('click', ()=>{
+              const src = card.dataset.src;
+              if(src) openVideo(src);
+              else {
+                card.animate([{transform:'scale(.98)'},{transform:'scale(1)'}],{duration:180});
+                card.style.border = '2px dashed #ffd6ea';
+                setTimeout(()=> card.style.border='1px solid #def3e6',350);
+              }
+            });
+            card.addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' ') card.click(); });
+          });
+
+          // Daisy button bloom and video functionality
+          const daisyBtn = document.getElementById('daisy-button');
+          const daisyText = document.getElementById('daisy-text');
+          let isBloom = false;
+
+          if(daisyBtn) {
+            daisyBtn.addEventListener('click', ()=>{
+              isBloom = !isBloom;
+              daisyBtn.classList.toggle('daisy-bloom', isBloom);
+              daisyText.textContent = isBloom ? "🌼 Blooming for you!" : "Click me to bloom!";
+
+              if(isBloom) {
+                openVideo('MEME/meme.mp4');
+              }
+            });
+          }
+
+          closeBtn.addEventListener('click', closeVideo);
+          document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeVideo(); });
+        })();
+
+      // Letter button functionality
+      const letterBtn = document.getElementById('letterBtn');
+      const letterContent = document.getElementById('letterContent');
+      const closeLetterBtn = document.getElementById('closeLetterBtn');
+
+      let isLetterOpen = false;
+
+      function toggleLetter() {
+        if (isLetterOpen) {
+          closeLetter();
+        } else {
+          openLetter();
+        }
+      }
+
+      function openLetter() {
+        letterBtn.innerHTML = '💌'; // Change to open envelope
+        letterBtn.style.transform = 'scale(1.1)';
+        letterContent.style.display = 'block';
+        // Small delay to ensure the display change happens first
+        setTimeout(() => {
+          letterContent.style.opacity = '1';
+        }, 10);
+        isLetterOpen = true;
+      }
+
+      function closeLetter() {
+        letterContent.style.opacity = '0';
+        setTimeout(() => {
+          letterContent.style.display = 'none';
+          letterBtn.innerHTML = '✉️'; // Back to closed envelope
+          letterBtn.style.transform = 'scale(1)';
+        }, 500); // Match transition duration
+        isLetterOpen = false;
+      }
+
+      if(letterBtn && letterContent) {
+        letterBtn.addEventListener('click', toggleLetter);
+      }
+
+      if(closeLetterBtn) {
+        closeLetterBtn.addEventListener('click', closeLetter);
+      }
+
+      // initialize
+      showSection('greeting');
+
+    })();
+  </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>
