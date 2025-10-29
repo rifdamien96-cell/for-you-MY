@@ -190,6 +190,16 @@
     .hehe-sticker.left{left:8%;top:30%;transform:translate(-50%,-50%)}
     .hehe-sticker.right{right:8%;top:44%;transform:translate(50%,-50%)}
     @keyframes floatY{0%{transform:translateY(-4px)}50%{transform:translateY(6px)}100%{transform:translateY(-4px)}}
+
+    /* For you stickers */
+    .for-you-sticker{position:absolute;width:92px;height:92px;object-fit:contain;z-index:60;pointer-events:none;filter:drop-shadow(0 8px 18px rgba(0,0,0,0.12));animation:floatY 4s ease-in-out infinite}
+    .for-you-sticker.f1{left:6%;top:28%;transform:translate(-50%,-50%)}
+    .for-you-sticker.f2{right:6%;top:28%;transform:translate(50%,-50%)}
+
+    /* Take care stickers */
+    .takecare-sticker{position:absolute;width:120px;height:120px;object-fit:contain;z-index:60;pointer-events:none;filter:drop-shadow(0 8px 18px rgba(0,0,0,0.12));animation:floatY 4s ease-in-out infinite}
+    .takecare-sticker.t1{left:6%;top:28%;transform:translate(-50%,-50%)}
+    .takecare-sticker.t2{right:6%;top:28%;transform:translate(50%,-50%)}
   </style>
 </head>
 <body>
@@ -252,6 +262,9 @@
         <button class="btn-back" data-prev="greeting">Back</button>
         <button class="btn-next" data-next="letter">Letter</button>
       </div>
+
+      <img src="for you 1.gif" class="for-you-sticker f1" alt="For you Sticker 1">
+      <img src="for you 2.gif" class="for-you-sticker f2" alt="For you Sticker 2">
     </section>
 
     <!-- LETTER -->
@@ -413,6 +426,9 @@
         <img id="takecare-image" src="take care mid.png" alt="Take care" class="take-heart"/>
       </div>
       <div id="typewriter-text" class="take-text"></div>
+
+      <img src="take care 1.png" class="takecare-sticker t1" alt="Take care Sticker 1">
+      <img src="take care 2.png" class="takecare-sticker t2" alt="Take care Sticker 2">
     </section>
 
   </div>
@@ -719,43 +735,5 @@
 
     })();
   </script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
 </body>
 </html>
